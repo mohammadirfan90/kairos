@@ -1,0 +1,110 @@
+# =========================================================
+# AI agent / tool caches and metadata
+# =========================================================
+.puku/
+.puku
+.agent/
+.agent
+.cursor/
+.cursor
+.windsurf/
+.windsurf
+.aider*
+.claude/
+.claude
+.continue/
+.continue
+.cody/
+.cody
+
+# Catch-all: any hidden file or directory that isn't already
+# whitelisted by the framework below. Safe because the
+# whitelisted files (.env.example, .gitattributes, etc.)
+# are explicitly listed and re-added below.
+.*
+!.gitignore
+!.gitattributes
+!.gitkeep
+!.env.example
+!.env.local.example
+!.eslintrc*
+!.prettierrc*
+!.editorconfig
+!.dockerignore
+!.npmrc
+
+# =========================================================
+# Dependencies
+# =========================================================
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# =========================================================
+# Testing & coverage
+# =========================================================
+coverage/
+.nyc_output/
+junit.xml
+playwright-report/
+test-results/
+*.lcov
+
+# =========================================================
+# Next.js
+# =========================================================
+.next/
+out/
+next-env.d.ts
+build/
+dist/
+
+# =========================================================
+# Production / runtime
+# =========================================================
+*.log
+*.pid
+*.seed
+*.pid.lock
+.pnpm-store/
+
+# =========================================================
+# Misc OS / editor cruft
+# =========================================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# =========================================================
+# Environment & secrets
+# =========================================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================================================
+# Vercel
+# =========================================================
+.vercel
+
+# =========================================================
+# TypeScript
+# =========================================================
+*.tsbuildinfo
+
+# =========================================================
+# Turbo / monorepo (in case it becomes one)
+# =========================================================
+.turbo/
+
+# =========================================================
+# Local Netlify / Cloudflare / Firebase
+# =========================================================
+.netlify/
+.wrangler/
+.firebase/
