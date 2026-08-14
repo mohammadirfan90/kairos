@@ -106,10 +106,26 @@ export default function ProjectWorkspacePage() {
           cachedItems = checklistData.data.items || [];
           setCategories(cachedCategories || []);
           setItems(cachedItems || []);
+          setCollapsedCategories((prev) => {
+            if (Object.keys(prev).length > 0) return prev;
+            const init: Record<string, boolean> = {};
+            cachedCategories?.forEach((c, idx) => {
+              if (idx >= 2) init[c.id] = true;
+            });
+            return init;
+          });
         }
       } else if (cachedCategories && cachedItems) {
         setCategories(cachedCategories);
         setItems(cachedItems);
+        setCollapsedCategories((prev) => {
+          if (Object.keys(prev).length > 0) return prev;
+          const init: Record<string, boolean> = {};
+          cachedCategories?.forEach((c, idx) => {
+            if (idx >= 2) init[c.id] = true;
+          });
+          return init;
+        });
       }
 
       if (projData.success && projData.data) {
@@ -395,9 +411,28 @@ export default function ProjectWorkspacePage() {
     return (
       <div className="min-h-screen flex flex-col bg-neutral-50 dark:bg-[#09090b]">
         <Header backHref="/" />
-        <div className="flex-1 flex items-center justify-center font-mono text-xs text-neutral-500">
-          Loading production readiness workspace...
+        <div className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 sm:px-6 py-4 animate-pulse">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="space-y-2">
+              <div className="h-5 w-48 bg-neutral-200 dark:bg-neutral-800 rounded-sm" />
+              <div className="h-3 w-64 bg-neutral-100 dark:bg-neutral-850 rounded-sm" />
+            </div>
+            <div className="h-8 w-28 bg-neutral-200 dark:bg-neutral-800 rounded-sm" />
+          </div>
         </div>
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6 animate-pulse">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="p-4 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-sm h-24" />
+            ))}
+          </div>
+          <div className="h-10 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-sm" />
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-12 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-sm" />
+            ))}
+          </div>
+        </main>
       </div>
     );
   }

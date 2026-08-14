@@ -507,10 +507,45 @@ export async function getProjectById(id: string): Promise<Project | null> {
   const pool = getPool();
   if (pool) {
     try {
-      const res = await pool.query("SELECT * FROM projects WHERE id = $1 OR slug = $1", [id]);
+      const res = await pool.query(
+        `SELECT 
+          p.id, p.name, p.slug, p.description, p.version, p.environment,
+          p.repository_url, p.deployment_url, p.owner, p.lead_tester,
+          p.status, p.target_release_date, p.created_at, p.updated_at,
+          COALESCE(
+            json_agg(
+              json_build_object(
+                'id', pcr.id,
+                'projectId', pcr.project_id,
+                'itemId', pcr.item_id,
+                'status', pcr.status,
+                'testerName', pcr.tester_name,
+                'testerId', pcr.tester_id,
+                'notes', pcr.notes,
+                'expectedBehavior', pcr.expected_behavior,
+                'actualBehavior', pcr.actual_behavior,
+                'stepsToReproduce', pcr.steps_to_reproduce,
+                'evidenceUrl', pcr.evidence_url,
+                'updatedAt', pcr.updated_at
+              )
+            ) FILTER (WHERE pcr.id IS NOT NULL),
+            '[]'
+          ) AS results
+        FROM projects p
+        LEFT JOIN project_checklist_results pcr ON pcr.project_id = p.id
+        WHERE p.id = $1 OR p.slug = $1
+        GROUP BY p.id`,
+        [id]
+      );
+
       if (res.rows.length > 0) {
         const row = res.rows[0];
-        const results = await getProjectResults(row.id);
+        const rawResults = row.results || [];
+        const results: ProjectChecklistResult[] = rawResults.map((r: any) => ({
+          ...r,
+          item: canonicalItemMap.get(r.itemId),
+        }));
+
         const readiness = calculateReadiness(CANONICAL_ITEMS, results);
         return {
           id: row.id,
